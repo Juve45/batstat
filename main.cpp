@@ -114,7 +114,10 @@ void newPrint()
 	mvaddstr(3, 0, buff);
 	sprintf(buff, "%-30s%.2lf%%\n", "Percentage left:", currentEnergy/maxEnergy*100);
 	mvaddstr(4, 0, buff);
-	sprintf(buff, "%-30s%.2lf%%\n", "Average power Consumption:", currentEnergy/timeElapsed*100);
+	sprintf(buff, "%-30s%.2lf Wh\n", "Average power Consumption:", (initEnergy - currentEnergy) / 1000000 / (1. * timeElapsed / 3600.));
+	ofstream ferr("log.txt");
+	ferr << initEnergy - currentEnergy << " Whr" << endl;
+	ferr << (1. * timeElapsed / 3600.) << " s" << endl;
 	mvaddstr(5, 0, buff);
 	sprintf(buff, "%-30s%2d:%2d:%2d since %.2lf%%\n", "Time elapsed:", timeElapsed/3600, (timeElapsed/60)%60, timeElapsed%60, initEnergy/maxEnergy*100);
 	mvaddstr(6, 0, buff);
