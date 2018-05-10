@@ -95,34 +95,35 @@ void newPrint()
 {
 	char buff[255];
 	erase();
-	sprintf(buff, "%-30s%s\n", "Status: ", status.c_str());
+	sprintf(buff, "%-30s\n", "Status: ");
+	mvaddstr(0, 0, buff);
 	
 	if(status[0] == 'C')
 		attron(COLOR_PAIR(3));
 	else
 		attron(COLOR_PAIR(2));
+	mvaddstr(0, strlen(buff) - 1, status.c_str());
 
-	mvaddstr(0, 0, buff);
 
 	attron(COLOR_PAIR(1));
 	sprintf(buff, "%-30s%.2lf Wh\n", "Max energy:", maxEnergy/1000000);
-	// mvaddstr(1, 0, buff);
-	mvwprintw(mainwin, 1, 0, "%s", buff);
+	mvaddstr(1, 0, buff);
 	sprintf(buff, "%-30s%.2lf Wh\n", "Energy left:", currentEnergy/1000000);
-	// mvaddstr(2, 0, buff);
-	mvwprintw(mainwin, 2, 0, "%s", buff);
+	mvaddstr(2, 0, buff);
 	sprintf(buff, "%-30s%.2lf W\n", "Power Consumption:", currentPower/1000000);
 	mvaddstr(3, 0, buff);
 	sprintf(buff, "%-30s%.2lf%%\n", "Percentage left:", currentEnergy/maxEnergy*100);
 	mvaddstr(4, 0, buff);
-	sprintf(buff, "%-30s%2d:%2d:%2d since %.2lf%%\n", "Time elapsed:", timeElapsed/3600, (timeElapsed/60)%60, timeElapsed%60, initEnergy/maxEnergy*100);
+	sprintf(buff, "%-30s%.2lf%%\n", "Average power Consumption:", currentEnergy/timeElapsed*100);
 	mvaddstr(5, 0, buff);
-
-	sprintf(buff, "= Time   ======== Percent ============================================\n");
+	sprintf(buff, "%-30s%2d:%2d:%2d since %.2lf%%\n", "Time elapsed:", timeElapsed/3600, (timeElapsed/60)%60, timeElapsed%60, initEnergy/maxEnergy*100);
 	mvaddstr(6, 0, buff);
 
+	sprintf(buff, "= Time   ======== Percent ============================================\n");
+	mvaddstr(7, 0, buff);
+
 	for(int i = logIndex; i < logCache.size(); i++)
-		mvaddstr(7 + i - logIndex, 0, logCache[i].c_str());
+		mvaddstr(8 + i - logIndex, 0, logCache[i].c_str());
 
 	refresh();
 }
