@@ -8,6 +8,9 @@ CLI battery status for linux
 * Time elapsed from the start of the program, without tracking the sleep time of the machine.
 * Battery level history
 
+# Install
+* Download the "batstat" file from the "bin" folder, and run it in your machine
+
 # Limitations
 * Only 1 battery supported
 * Gathers informations only from this folder: "/sys/class/power_supply/".
