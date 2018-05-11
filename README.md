@@ -8,6 +8,8 @@ CLI battery status for linux
 * Time elapsed from the start of the program, without tracking the sleep time of the machine.
 * Battery level history
 
+![Screenshot from application](example.png)
+
 # Install
 * Download the "batstat" file from the "bin" folder, and run it in your machine
 * You may copy this file in the "/usr/bin" folder (or another folder that is in your $PATH) to run it anytime directly from terminal.
