@@ -13,9 +13,8 @@ int refreshRate = 3;
 
 float maxEnergy, currentPower, currentEnergy, initEnergy;
 int initTime, percent, timeNow, timeElapsed = -refreshRate;
-string Path = PATH;
 int lastTime = 0, logIndex = 0;
-string status;
+string Path = PATH, status;
 bool quit = false;
 WINDOW * mainwin;
 vector <string> logCache;
@@ -34,15 +33,10 @@ void init()
 	  exit(EXIT_FAILURE);
   }
   keypad(stdscr, TRUE);
-	//cbreak();	
-	//nodelay(mainwin, TRUE);
-	
 	
 	if(has_colors() == FALSE)
 	{	
-		// endwin();
 		printf("Your terminal does not support color\n");
-		// exit(1);
 	}
 	start_color();
 
@@ -51,9 +45,6 @@ void init()
 	init_pair(1, COLOR_WHITE, COLOR_BLACK);
 	init_pair(2, COLOR_RED, COLOR_BLACK);
 	init_pair(3, COLOR_GREEN, COLOR_BLACK);
-
-	// attron(COLOR_PAIR(1));
-	// for(int i = 0; i < 3000; i++) printf("   ");
 
 	bkgd(COLOR_PAIR(1));
 
