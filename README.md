@@ -11,8 +11,9 @@ CLI battery status for linux
 ![Screenshot from application](example.png)
 
 # Install
-* Download the [`batstat`](batstat) file and run it.
-* You may copy this file into `/usr/bin` (or another folder in your `$PATH`) to run it from anywhere.
+```sh
+$ sudo make install
+```
 
 # Limitations
 * Only 1 battery supported
@@ -24,5 +25,5 @@ CLI battery status for linux
 
 # Compilation command
 ```sh
-g++ main.cpp -lncurses -pthread -std=c++11 -o batstat
+$ make
 ```
