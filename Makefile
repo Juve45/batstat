@@ -15,7 +15,7 @@ clean:
 	@rm $(BIN)
 
 build: main.cpp
-	$(CC) -o $(BIN) $(CCFLAGS) $(LDFLAGS) $<
+	$(CC) -o $(BIN) $(CCFLAGS) $< $(LDFLAGS)
 
 install:
 	install -m 775 $(BIN) $(DESTDIR)$(PREFIX)/bin
