@@ -5,6 +5,8 @@
 #include <dirent.h>
 
 #define PATH "/sys/class/power_supply/"
+#define ENERGY "charge"
+#define POWER "voltage"
 #define LOG_P 20
 using namespace std;
 
@@ -51,19 +53,19 @@ void init()
 
   bkgd(COLOR_PAIR(1));
 
-  ifstream enNow(Path+"energy_now");
+  ifstream enNow(Path+ENERGY+"_now");
   enNow >> initEnergy;
   
   initTime = time(NULL);
   
-  ifstream maxEnergyFile(Path+"energy_full");
+  ifstream maxEnergyFile(Path+ENERGY+"_full");
   maxEnergyFile >> maxEnergy;
 }
 
 void refreshValues()
 {
-  ifstream powNow(Path+"power_now");
-  ifstream enNow(Path+"energy_now");
+  ifstream powNow(Path+POWER+"_now");
+  ifstream enNow(Path+ENERGY+"_now");
   ifstream st(Path+"status");
   powNow >> currentPower;
   enNow >> currentEnergy;
