@@ -4,43 +4,58 @@
 #include <string>
 #include <dirent.h>
 
-#define PATH "/sys/class/power_supply/"
-#define ENERGY "charge"
-#define POWER "voltage"
 #define LOG_P 20
 using namespace std;
 
 int refreshRate = 3;
 //const string logFile = "log.txt";
 
+const string PATH = "/sys/class/power_supply/";
+
 float maxEnergy, currentPower, currentEnergy, initEnergy;
 int initTime, percent, timeNow, timeElapsed = -refreshRate;
 int lastTime = 0, logIndex = 0;
-string Path = PATH, status;
+string Path = PATH, status, energyPath, powerPath;
 bool quit = false;
 WINDOW * mainwin;
 vector <string> logCache;
 
+bool checkdir(string str) {
+	DIR* dir = opendir(str.c_str());
+	if (dir) {
+		closedir(dir);
+		return true;
+	}
+	return false;
+}
+
 void init()
 {
-  DIR* dir = opendir((string(PATH)+"BAT0").c_str());
-  if (dir)
-  {
+
+  if(checkdir(Path + "BAT0")) {
     Path += "BAT0/";
-  }
-  else
-  {
+  } else {
     Path += "BAT1/";
   }
 
+  if(checkdir(Path + "charge"))
+    energyPath = Path + "charge";
+  else
+  	energyPath = Path + "energy";
+
+  if(checkdir(Path + "voltage"))
+    powerPath = Path + "voltage";
+  else
+  	powerPath = Path + "power";
+
+
   if ( (mainwin = initscr()) == NULL ) {
-    fprintf(stderr, "Error initialising ncurses.\n");
+    fprintf(stderr, "Error initializing ncurses.\n");
     exit(EXIT_FAILURE);
   }
   keypad(stdscr, TRUE);
   
-  if(has_colors() == FALSE)
-  {
+  if(has_colors() == FALSE) {
     printf("Your terminal does not support color\n");
   }
   start_color();
@@ -53,20 +68,20 @@ void init()
 
   bkgd(COLOR_PAIR(1));
 
-  ifstream enNow(Path+ENERGY+"_now");
+  ifstream enNow(energyPath + "_now");
   enNow >> initEnergy;
   
   initTime = time(NULL);
   
-  ifstream maxEnergyFile(Path+ENERGY+"_full");
+  ifstream maxEnergyFile(energyPath + "_full");
   maxEnergyFile >> maxEnergy;
 }
 
 void refreshValues()
 {
-  ifstream powNow(Path+POWER+"_now");
-  ifstream enNow(Path+ENERGY+"_now");
-  ifstream st(Path+"status");
+  ifstream powNow(powerPath + "_now");
+  ifstream enNow(energyPath + "_now");
+  ifstream st(Path + "status");
   powNow >> currentPower;
   enNow >> currentEnergy;
   timeNow = time(NULL);
