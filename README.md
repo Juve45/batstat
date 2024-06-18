@@ -12,7 +12,11 @@ CLI battery status for linux
 
 # Install
 ```sh
+
+$ sudo apt-get install make g++ libncurses5-dev
+$ sudo make build
 $ sudo make install
+
 ```
 
 # Limitations
