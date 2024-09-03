@@ -23,6 +23,7 @@ $ sudo make install
 * Only 1 battery supported
 * Gathers data only from `/sys/class/power_supply/`
   If your machine contains the battery information in a different folder, this program will not work.
+* On arch systems (or other distros which use current/charge/voltage instead of energy/power) the program will now show the battery capacity in Ah and discharge in A. A fix for this is not obvious since 
 
 # Dependencies
 * ncurses C++ library
