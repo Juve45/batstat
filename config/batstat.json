@@ -1,0 +1,11 @@
+{
+	// folder for finding battery info. By default "/sys/class/power_supply/"
+	"power_supply_path" : "/sys/class/power_supply/",
+	
+	// refresh rate in seconds, integer value between 1 and 120. If provided value is not valid, 3, is used by default
+	"refresh_rate" : 2,
+
+	// battery history log refresh rate in seconds, integer value between 1 and 120. If provided value is not valid, 20, is used by default
+	"log_rate" : 3
+
+}

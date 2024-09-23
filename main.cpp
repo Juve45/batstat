@@ -3,17 +3,23 @@
 #include <curses.h>
 #include <string>
 #include <dirent.h>
+#include "include/nlohmann/json.hpp"
 
-#define LOG_P 20
 using namespace std;
 
-int refreshRate = 3;
 //const string logFile = "log.txt";
 
-const string PATH = "/sys/class/power_supply/";
+using json = nlohmann::json;
+
+
+int refreshRate = 3;
+int LOG_P = 20;
+string PATH = "/sys/class/power_supply/";
+const string CONFIG = "/etc/batstat.json";
+const string LOCAL_CONFIG = "~/.config/batstat.json";
 
 float maxEnergy, currentPower, currentEnergy, initEnergy;
-int initTime, percent, timeNow, timeElapsed = -refreshRate;
+int initTime, percent, timeNow, timeElapsed = 0;
 int lastTime = 0, logIndex = 0;
 
 string Path = PATH, status, energyPath, powerPath;
@@ -82,8 +88,33 @@ BatteryStatus getBatteryInfo() {
 	return BatteryStatus(currentPower, currentEnergy);
 }
 
+void load_config() {
+
+	string configfile = CONFIG;
+	if(checkfile(LOCAL_CONFIG)) 
+		configfile = LOCAL_CONFIG;
+
+	cout << configfile << endl;
+	ifstream jsonf(configfile);
+	json config = json::parse(jsonf, nullptr, true, true);
+
+	if(config["refresh_rate"].is_number() && 1 <= config["refresh_rate"] && config["refresh_rate"] <= 120) 
+		refreshRate = config["refresh_rate"];
+
+	if(config["log_rate"].is_number() && 1 <= config["log_rate"] && config["log_rate"] <= 120)
+		LOG_P = config["log_rate"];
+
+	if(config["power_supply_path"].is_string())
+		PATH = config["power_supply_path"];
+
+	timeElapsed = -refreshRate;
+}
+
+
 void init()
 {
+
+	load_config();
 
 	if(checkdir(Path + "BAT0")) {
 		Path += "BAT0/";
@@ -138,14 +169,10 @@ void init()
 
 	maxEnergyFile >> maxEnergy;
 
-	// cout << initEnergy << ' ' << maxEnergy << endl;
-	// cout << powerUnit << endl;
-	// exit(0);
 }
 
 void refreshValues()
-{
-		
+{		
 	auto batInit = getBatteryInfo();
 	currentEnergy = batInit.energy;
 	currentPower = batInit.power;
@@ -181,9 +208,7 @@ void newPrint()
 	sprintf(buff, "%-30s%.2lf%%\n", "Percentage left:", currentEnergy/maxEnergy*100);
 	mvaddstr(4, 0, buff);
 	sprintf(buff, "%-30s%.2lf %c\n", "Average power Consumption:", (initEnergy - currentEnergy) / 1000000 / (1. * timeElapsed / 3600.), powerUnit);
-	ofstream ferr("log.txt");
-	ferr << initEnergy - currentEnergy << " Whr" << endl;
-	ferr << (1. * timeElapsed / 3600.) << " s" << endl;
+	
 	mvaddstr(5, 0, buff);
 	sprintf(buff, "%-30s%2d:%2d:%2d since %.2lf%%\n", "Time elapsed:", timeElapsed/3600, (timeElapsed/60)%60, timeElapsed%60, initEnergy/maxEnergy*100);
 	mvaddstr(6, 0, buff);
@@ -237,7 +262,7 @@ void coreFunction() {
 	while(!quit) {
 		refreshValues();
 		newPrint();
-		if(timeElapsed % LOG_P == 0)
+		if(timeElapsed % (LOG_P * refreshRate) == 0)
 			addLog();
 		sleep(refreshRate);
 	}

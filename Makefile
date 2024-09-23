@@ -4,6 +4,7 @@ CCFLAGS=-std=c++11
 LDFLAGS=-lncurses -pthread
 
 BIN=batstat
+CONFIG=/etc/
 
 ifeq ($(PREFIX),)
 	PREFIX := /usr/local
@@ -17,5 +18,8 @@ clean:
 build: main.cpp
 	$(CC) -o $(BIN) $(CCFLAGS) $< $(LDFLAGS)
 
-install:
+copy: config/batstat.json
+	cp -f $< $(CONFIG)
+
+install: copy
 	install -m 775 $(BIN) $(DESTDIR)$(PREFIX)/bin
