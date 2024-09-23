@@ -3,9 +3,9 @@
 	"power_supply_path" : "/sys/class/power_supply/",
 	
 	// refresh rate in seconds, integer value between 1 and 120. If provided value is not valid, 3, is used by default
-	"refresh_rate" : 2,
+	"refresh_rate" : 3,
 
-	// battery history log refresh rate in seconds, integer value between 1 and 120. If provided value is not valid, 20, is used by default
-	"log_rate" : 3
-
+	// battery history log rate. batstat will register a new log entry each after `log_rate` * `refresh_rate` seconds. 
+	// integer value between 1 and 120. Default: 20
+	"log_rate" : 20
 }
