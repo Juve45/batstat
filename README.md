@@ -19,10 +19,27 @@ $ sudo make install
 
 ```
 
+# Configuration
+* `batstat` uses default global config file `\etc\batstat.json`
+* a user config file is searched before the global config, under `~/.config/batstat.json`. 
+Note that this file is not automatically created, a user should manually create it.
+* For changes in the configuration, eighter modify the global config, or create a user config file.
+* The default configuration file can be seen below:
+```json
+{
+  // folder for finding battery info. By default "/sys/class/power_supply/"
+  "power_supply_path" : "/sys/class/power_supply/",
+  
+  // refresh rate in seconds, integer value between 1 and 120. If provided value is not valid, 3, is used by default
+  "refresh_rate" : 2,
+
+  // battery history log refresh rate in seconds, integer value between 1 and 120. If provided value is not valid, 20, is used by default
+  "log_rate" : 3
+}
+```
+
 # Limitations
 * Only 1 battery supported
-* Gathers data only from `/sys/class/power_supply/`
-  If your machine contains the battery information in a different folder, this program will not work.
 * On arch systems (or other distros which use current/charge/voltage instead of energy/power) the program will now show the battery capacity in Ah and discharge in A. A fix for this is not obvious since 
 
 # Dependencies
